@@ -1,0 +1,100 @@
+var checkedLabels = false;
+var checkedPrinciple = false;
+var clickedReset = false;
+
+$(function () {
+
+	$('#main_tab a:first').tab('show');
+
+    $('#main_tab a ').on('click', function() {
+		var $panel, tab;
+		tab = $(this).attr('href').substr(1);
+		$cont = $('body');
+		if (tab === 'experiment') {
+			$("#bottom_bar").show();
+			return $cont.addClass('bg1').removeClass('bg2');
+		} else {
+			$("#bottom_bar").hide();
+			return $cont.addClass('bg2').removeClass('bg1');
+		}
+    });
+
+	$("#main_tab > li > a").focus(function(){
+		$(this).blur();
+	});
+
+	$('#more_modal').modal({
+		keyboard: false,
+		show: false,
+		backdrop: 'static'
+	});
+
+	$('#checkLabels').click(function() {
+		if(checkedLabels) {
+			$(this).removeClass('checked');
+			$(this).addClass('unchecked');
+			checkedLabels = false;
+		} else {
+			$(this).removeClass('unchecked');
+			$(this).addClass('checked');
+			checkedLabels = true;
+		}
+	});
+
+	$('#checkPrinciple').click(function() {
+		if(checkedPrinciple) {
+			$(this).removeClass('checked');
+			$(this).addClass('unchecked');
+			checkedPrinciple = false;
+		} else {
+			$(this).removeClass('unchecked');
+			$(this).addClass('checked');
+			checkedPrinciple = true;
+		}
+	});
+
+	$("#resetButton").click(function(){
+		$('#checkLabels').removeClass('checked');
+		$('#checkLabels').addClass('unchecked');
+		checkedLabels = false;
+		$('#checkPrinciple').removeClass('checked');
+		$('#checkPrinciple').addClass('unchecked');
+		checkedPrinciple = false;
+		clickedReset = true;
+	});
+
+	$(window).resize(function(){
+	 	change_descriptsion();
+	});
+
+	$(window).trigger('resize');
+});
+
+function change_descriptsion(){
+	var obj = $("#procedure-description");
+
+	obj.html("");	
+	var tmp = $('#more_modal > div.modal-body').html().split(" ");
+	var tmp2 = "";
+	
+	var len1 = $('#moreButton').offset().left - obj.offset().left - 135;
+	var len2 = 0;
+
+	for(var i in tmp){
+		tmp2 += " " + tmp[i];
+		len2 = getWidth(tmp2);
+		
+		if(len2 > len1){
+			obj.append("...");
+			break;
+		}else{
+			if(i > 0)	obj.append(" ");
+			obj.append(tmp[i]);
+		}
+	}
+}
+
+function getWidth(str){
+	$("#tmp_div").html(str);
+	return $("#tmp_div").width();	
+}
